@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 
@@ -11,7 +12,7 @@ public class WebCrawler {
 	
 	private String username;
 	private String password;
-	private HtmlUnitDriver crawler;
+	private WebDriver crawler;
 	
 	public WebCrawler(String username, String password){
 		crawler = null;
@@ -27,7 +28,7 @@ public class WebCrawler {
 		return password;
 	}
 	
-	public HtmlUnitDriver getCrawler(){
+	public WebDriver getCrawler(){
 		return crawler;
 	}
 	
