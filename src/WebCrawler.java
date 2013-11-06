@@ -65,6 +65,7 @@ public class WebCrawler {
 		System.out.println("Login Finished\n");
 	}
 	
+	@Override
 	public String toString(){
 		String s = "Crawler: " + username + "\n";
 		if(crawler == null){
