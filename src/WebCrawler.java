@@ -1,5 +1,8 @@
 import java.util.concurrent.TimeUnit;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -34,12 +37,22 @@ public class WebCrawler {
 	}
 	
 	public void parseContest(String contestURL){
-		System.out.println("Parsing");
+		System.out.println("Parsing...\n");
 		crawler.get(contestURL);
+		Document doc = Jsoup.parse(crawler.getPageSource());
+		Elements problems = doc.select(".problems tr");
+		System.out.println(crawler.getTitle());
+		int nProblem = problems.size() - 1;
+		System.out.println("There are " + nProblem + " problems.");
+		for(int i = 1; i <= nProblem; i++ ){
+			String problemURL = "http://codeforces.com/" + problems.get(i).select("a").first().attr("href");
+			crawler.get(problemURL);
+			System.out.println(crawler.getTitle());
+		}
 	}
 	
 	public void login(String url){
-		System.out.println("Crawler " + username + " is logging in to " + url);
+		System.out.println("logging in to " + url + "\n");
 		crawler = new HtmlUnitDriver(false);
 		crawler.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		crawler.get(url);
@@ -48,7 +61,7 @@ public class WebCrawler {
 		crawler.findElement(By.name("password")).clear();
 		crawler.findElement(By.name("password")).sendKeys("4631847");
 		crawler.findElement(By.className("submit")).click();
-		System.out.println("Login Finished");
+		System.out.println("Login Finished\n");
 	}
 	
 	public String toString(){
