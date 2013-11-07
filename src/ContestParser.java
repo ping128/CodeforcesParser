@@ -1,4 +1,5 @@
 import java.io.Console;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ContestParser {
@@ -28,6 +29,12 @@ public class ContestParser {
 		crawler.login(LOGIN_URL);
 		System.out.print("Contest: ");
 		contestURL = cin.nextLine();
-		crawler.parseContest(contestURL);
+		try {
+			crawler.parseContest(contestURL);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 }

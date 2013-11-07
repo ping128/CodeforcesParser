@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,21 +24,27 @@ public class Problem {
 	public void addSampleTest(String input, String output) {
 		this.inputs.add(parse(input));
 		this.outputs.add(parse(output));
-		System.out.println(input);
+	}
+	
+	public List<String> getInputs(){
+		return Collections.unmodifiableList(inputs);
 	}
 
+	public List<String> getOutputs(){
+		return Collections.unmodifiableList(outputs);
+	}
+	
 	public String parse(String text) {
 		StringBuilder ret = new StringBuilder();
 		Scanner cin = new Scanner(text);
-		System.out.println(text.length());
-		String[] s2 = text.split("\n|\r\n");
-		for (String s : s2) {
-			s = s.trim();
+		while(cin.hasNextLine()){
+			String s = cin.nextLine().trim();
 			if (s.length() > 0) {
-				ret.append(s + "\n");
-				break;
+				if(ret.length() > 0) ret.append("\n");
+				ret.append(s);
 			}
 		}
+		cin.close();
 		return ret.toString();
 	}
 

@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
@@ -38,7 +40,7 @@ public class WebCrawler {
 			return crawler.getCurrentUrl();
 	}
 
-	public void parseContest(String contestURL) {
+	public void parseContest(String contestURL) throws IOException {
 		System.out.println("Parsing...\n");
 		crawler.get(contestURL);
 		Document doc = Jsoup.parse(crawler.getPageSource());
@@ -59,7 +61,17 @@ public class WebCrawler {
 			for (int j = 0; j < inputs.size(); j++) {
 				problem.addSampleTest(inputs.get(j).text(), outputs.get(j).text());
 			}
+			
+			List<String> input = problem.getInputs();
+			for (int j = 0; j < input.size(); j++) {
+				FileMaker.buildFile((char)('a' + (i - 1)) + ".in." + (j + 1), input.get(j));
+			}
+			List<String> output = problem.getInputs();
+			for (int j = 0; j < output.size(); j++) {
+				FileMaker.buildFile((char)('a' + (i - 1)) + ".out." + (j + 1), output.get(j));
+			}
 		}
+		System.out.println("Done Parsing");
 	}
 
 	public void login(String url) {
