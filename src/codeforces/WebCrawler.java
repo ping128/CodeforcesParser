@@ -1,4 +1,5 @@
 package codeforces;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -9,16 +10,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import com.gargoylesoftware.htmlunit.protocol.about.Handler;
+
 public class WebCrawler {
 
 	private String username;
 	private String password;
 	private WebDriver crawler;
-
+	private String handleColor;
+	
 	public WebCrawler(String username, String password) {
-		crawler = null;
+		this.crawler = null;
 		this.username = username;
 		this.password = password;
+		this.handleColor = "black";
 	}
 
 	public String getUsername() {
@@ -39,20 +44,32 @@ public class WebCrawler {
 		else
 			return crawler.getCurrentUrl();
 	}
+	
+	public String getHandleColor(){
+		return handleColor;
+	}
 
-	public void parseContest(String contestURL) throws IOException {
+	/**
+	 * @param contestURL
+	 * @throws IOException
+	 */
+	public Contest parseContest(String contestURL) throws IOException {
+		
 		System.out.println("Parsing...\n");
 		crawler.get(contestURL);
 		Document doc = Jsoup.parse(crawler.getPageSource());
 		Elements problems = doc.select(".problems tr");
-		System.out.println(crawler.getTitle());
+		
+		Contest ret = new Contest(doc.select(".rtable .left a").first().text(), contestURL);
+		System.out.println(ret);
+		
 		int nProblem = problems.size() - 1;
 		System.out.println("There are " + nProblem + " problems.");
 		for (int i = 1; i <= nProblem; i++) {
 			String problemURL = "http://codeforces.com/"
 					+ problems.get(i).select("a").first().attr("href");
 			crawler.get(problemURL);
-			System.out.println(crawler.getTitle());
+			System.out.print(crawler.getTitle());
 			doc = Jsoup.parse(crawler.getPageSource());
 			Elements temp = doc.getElementsByClass("title");
 			Problem problem = new Problem(temp.first().text());
@@ -61,25 +78,26 @@ public class WebCrawler {
 			for (int j = 0; j < inputs.size(); j++) {
 				problem.addSampleTest(inputs.get(j).text(), outputs.get(j).text());
 			}
-
-/*
-			List<String> input = problem.getInputs();
-			for (int j = 0; j < input.size(); j++) {
-				FileMaker.buildFile((char) ('a' + (i - 1)) + ".in." + (j + 1), input.get(j));
-			}
-			List<String> output = problem.getInputs();
-			for (int j = 0; j < output.size(); j++) {
-				FileMaker.buildFile((char) ('a' + (i - 1)) + ".out." + (j + 1), output.get(j));
-			}
-*/
+			// List<String> input = problem.getInputs();
+			// for (int j = 0; j < input.size(); j++) {
+			// FileMaker.buildFile((char) ('a' + (i - 1)) + ".in." + (j + 1),
+			// input.get(j));
+			// }
+			// List<String> output = problem.getInputs();
+			// for (int j = 0; j < output.size(); j++) {
+			// FileMaker.buildFile((char) ('a' + (i - 1)) + ".out." + (j + 1),
+			// output.get(j));
+			// }
+			System.out.println(": " + problem.numSampleTest() + " sample tests");
+			ret.addProblem(problem);
 		}
-		System.out.println("Done Parsing");
+		return ret;
 	}
 
-	
 	/**
 	 * @param url
-	 * @throws IllegalAccessException : login failed
+	 * @throws IllegalAccessException
+	 *             : login failed
 	 */
 	public void login(String url) throws IllegalAccessException {
 		System.out.println("logging in to " + url + "\n");
@@ -91,11 +109,13 @@ public class WebCrawler {
 		crawler.findElement(By.name("password")).clear();
 		crawler.findElement(By.name("password")).sendKeys(password);
 		crawler.findElement(By.className("submit")).click();
-		if (crawler.getPageSource().indexOf("Invalid handle or password") == -1) {
-			System.out.println("Login Finished\n");
-		} else {
+		if (crawler.getPageSource().indexOf("Invalid handle or password") != -1) {
 			throw new IllegalAccessException();
 		}
+		
+		handleColor = Jsoup.parse(crawler.getPageSource()).select(".avatar a").get(1).attr("class");
+		String[] tokens = handleColor.split("-");
+		handleColor = tokens[tokens.length - 1];
 	}
 
 	@Override

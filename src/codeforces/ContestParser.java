@@ -4,6 +4,8 @@ import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
 
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
 import util.MsgFrame;
 
 public class ContestParser {
@@ -36,21 +38,53 @@ public class ContestParser {
 				WebCrawler crawler2 = new WebCrawler(name, password);
 				crawler2.login(LOGIN_URL);
 				crawler = crawler2;
+				MsgFrame.showMsg("Login", "<html>"
+						+ "<font color='#00AA00'>Login Finished!</font><br>" + "<font color='"
+						+ crawler.getHandleColor() + "'>" + crawler.getUsername() + "</font></html>");
 				break;
 			} catch (Exception e) {
-				MsgFrame.showMsg(
-						"Login",
-						"<html><font color='red'>Login Failed!</font></html>");
-
+				MsgFrame.showMsg("Login", "<html><font color='red'>Login Failed!</font></html>");
 			}
 		}
-		System.out.print("Contest: ");
-		contestURL = cin.nextLine();
-		try {
-			crawler.parseContest(contestURL);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		Contest contest;
+
+		while (true) {
+			System.out.print("Contest: ");
+			contestURL = cin.nextLine();
+			try {
+				contest = crawler.parseContest(contestURL);
+				MsgFrame.showMsg("Login",
+						"<html><font color='00AA00'>Parsing Contest OK!</font></html>");
+				break;
+			} catch (Exception e) {
+				MsgFrame.showMsg("Login",
+						"<html><font color='red'>Parsing Contest Failed!</font></html>");
+			}
+		}
+		System.out.println();
+		runCommands(crawler, contest);
+	}
+
+	public static void runCommands(WebCrawler crawler, Contest contest) {
+		CommandLine driver = new CommandLine(crawler, contest);
+		while (true) {
+			System.out.print(">> ");
+			String[] commands = cin.nextLine().split(" ");
+			if (commands.length > 0) {
+				if (commands[0].equals("help")) {
+					driver.help();
+				} else if (commands[0].equals("exit")) {
+					MsgFrame.showMsg("Login", "<html><font color='red'>Bye!</font></html>");
+
+					break;
+				} else {
+					System.out.println("Invalid Command!");
+				}
+			} else {
+				System.out.println("Invalid Command!");
+			}
+			System.out.println();
 		}
 	}
 }
