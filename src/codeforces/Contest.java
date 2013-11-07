@@ -26,4 +26,7 @@ public class Contest {
 		return ret;
 	}
 
+	public String getContestURL(){
+		return this.contestURL;
+	}
 }

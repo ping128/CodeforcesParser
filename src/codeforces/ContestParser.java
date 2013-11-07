@@ -1,10 +1,7 @@
 package codeforces;
 
 import java.io.Console;
-import java.io.IOException;
 import java.util.Scanner;
-
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import util.MsgFrame;
 
@@ -39,7 +36,7 @@ public class ContestParser {
 				crawler2.login(LOGIN_URL);
 				crawler = crawler2;
 				MsgFrame.showMsg("Login", "<html>"
-						+ "<font color='#00AA00'>Login Finished!</font><br>" + "<font color='"
+						+ "<font color='black'>Hello, </font>" + "<font color='"
 						+ crawler.getHandleColor() + "'>" + crawler.getUsername() + "</font></html>");
 				break;
 			} catch (Exception e) {
@@ -50,15 +47,15 @@ public class ContestParser {
 		Contest contest;
 
 		while (true) {
-			System.out.print("Contest: ");
+			System.out.print("Contest Link: ");
 			contestURL = cin.nextLine();
 			try {
 				contest = crawler.parseContest(contestURL);
-				MsgFrame.showMsg("Login",
-						"<html><font color='00AA00'>Parsing Contest OK!</font></html>");
+				MsgFrame.showMsg("Contest Parsing",
+						"<html><font color='#00AA00'>Parsing Contest OK!</font></html>");
 				break;
 			} catch (Exception e) {
-				MsgFrame.showMsg("Login",
+				MsgFrame.showMsg("Contest Parsing",
 						"<html><font color='red'>Parsing Contest Failed!</font></html>");
 			}
 		}
@@ -75,7 +72,7 @@ public class ContestParser {
 				if (commands[0].equals("help")) {
 					driver.help();
 				} else if (commands[0].equals("exit")) {
-					MsgFrame.showMsg("Login", "<html><font color='red'>Bye!</font></html>");
+					MsgFrame.showMsg("Login", "<html><font color='black'>Bye!</font></html>");
 
 					break;
 				} else {

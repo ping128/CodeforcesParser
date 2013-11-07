@@ -10,8 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import com.gargoylesoftware.htmlunit.protocol.about.Handler;
-
 public class WebCrawler {
 
 	private String username;
@@ -59,11 +57,14 @@ public class WebCrawler {
 		crawler.get(contestURL);
 		Document doc = Jsoup.parse(crawler.getPageSource());
 		Elements problems = doc.select(".problems tr");
-		
+
+		int nProblem = problems.size() - 1;
+		if(nProblem <= 0){
+			throw new IOException();
+		}
 		Contest ret = new Contest(doc.select(".rtable .left a").first().text(), contestURL);
 		System.out.println(ret);
 		
-		int nProblem = problems.size() - 1;
 		System.out.println("There are " + nProblem + " problems.");
 		for (int i = 1; i <= nProblem; i++) {
 			String problemURL = "http://codeforces.com/"
