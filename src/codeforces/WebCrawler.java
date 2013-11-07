@@ -1,5 +1,5 @@
+package codeforces;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
@@ -61,30 +61,41 @@ public class WebCrawler {
 			for (int j = 0; j < inputs.size(); j++) {
 				problem.addSampleTest(inputs.get(j).text(), outputs.get(j).text());
 			}
-			
+
+/*
 			List<String> input = problem.getInputs();
 			for (int j = 0; j < input.size(); j++) {
-				FileMaker.buildFile((char)('a' + (i - 1)) + ".in." + (j + 1), input.get(j));
+				FileMaker.buildFile((char) ('a' + (i - 1)) + ".in." + (j + 1), input.get(j));
 			}
 			List<String> output = problem.getInputs();
 			for (int j = 0; j < output.size(); j++) {
-				FileMaker.buildFile((char)('a' + (i - 1)) + ".out." + (j + 1), output.get(j));
+				FileMaker.buildFile((char) ('a' + (i - 1)) + ".out." + (j + 1), output.get(j));
 			}
+*/
 		}
 		System.out.println("Done Parsing");
 	}
 
-	public void login(String url) {
+	
+	/**
+	 * @param url
+	 * @throws IllegalAccessException : login failed
+	 */
+	public void login(String url) throws IllegalAccessException {
 		System.out.println("logging in to " + url + "\n");
 		crawler = new HtmlUnitDriver(false);
 		crawler.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		crawler.get(url);
 		crawler.findElement(By.name("handle")).clear();
-		crawler.findElement(By.name("handle")).sendKeys("ping128");
+		crawler.findElement(By.name("handle")).sendKeys(username);
 		crawler.findElement(By.name("password")).clear();
-		crawler.findElement(By.name("password")).sendKeys("4631847");
+		crawler.findElement(By.name("password")).sendKeys(password);
 		crawler.findElement(By.className("submit")).click();
-		System.out.println("Login Finished\n");
+		if (crawler.getPageSource().indexOf("Invalid handle or password") == -1) {
+			System.out.println("Login Finished\n");
+		} else {
+			throw new IllegalAccessException();
+		}
 	}
 
 	@Override

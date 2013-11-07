@@ -1,3 +1,4 @@
+package codeforces;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Problem {
 		return Collections.unmodifiableList(outputs);
 	}
 	
-	public String parse(String text) {
+	private String parse(String text) {
 		StringBuilder ret = new StringBuilder();
 		Scanner cin = new Scanner(text);
 		while(cin.hasNextLine()){
