@@ -9,7 +9,9 @@ public class ContestParser {
 
 	private static String LOGIN_URL = "http://codeforces.com/enter";
 	private static Scanner cin;
-	private static String contestURL;
+
+	// will update later
+	private static String pathToExecFile = "/home/ping128/Desktop/a.out";
 
 	public static void main(String[] args) {
 		cin = new Scanner(System.in);
@@ -18,12 +20,15 @@ public class ContestParser {
 		System.out.println("=============================");
 
 		WebCrawler crawler;
+
 		while (true) {
 			try {
+
 				System.out.print("Username: ");
 				String name = cin.nextLine();
 
 				System.out.print("Password: ");
+
 				Console cons = System.console();
 				String password;
 				if ((cons = System.console()) != null) {
@@ -32,12 +37,13 @@ public class ContestParser {
 				} else {
 					password = cin.nextLine();
 				}
-				WebCrawler crawler2 = new WebCrawler(name, password);
+
+				WebCrawler crawler2 = new WebCrawler(name, password, pathToExecFile);
 				crawler2.login(LOGIN_URL);
 				crawler = crawler2;
-				MsgFrame.showMsg("Login", "<html>"
-						+ "<font color='black'>Hello, </font>" + "<font color='"
-						+ crawler.getHandleColor() + "'>" + crawler.getUsername() + "</font></html>");
+				MsgFrame.showMsg("Login", "<html>" + "<font color='black'>Hello, </font>"
+						+ "<font color='" + crawler.getHandleColor() + "'>" + crawler.getUsername()
+						+ "</font></html>");
 				break;
 			} catch (Exception e) {
 				MsgFrame.showMsg("Login", "<html><font color='red'>Login Failed!</font></html>");
@@ -47,12 +53,14 @@ public class ContestParser {
 		Contest contest;
 
 		while (true) {
-			System.out.print("Contest Link: ");
-			contestURL = cin.nextLine();
+			System.out.print("Contest: ");
+			String contestURL = cin.nextLine();
+			// String contestURL = "358";
 			try {
 				contest = crawler.parseContest(contestURL);
 				MsgFrame.showMsg("Contest Parsing",
 						"<html><font color='#00AA00'>Parsing Contest OK!</font></html>");
+
 				break;
 			} catch (Exception e) {
 				MsgFrame.showMsg("Contest Parsing",
@@ -70,7 +78,7 @@ public class ContestParser {
 			String[] commands = cin.nextLine().split(" ");
 			try {
 				driver.run(commands);
-			} catch (Exception e){
+			} catch (Exception e) {
 				MsgFrame.showMsg("Commands",
 						"<html><font color='red'>Invalid Commands!</font></html>");
 			}

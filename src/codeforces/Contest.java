@@ -54,4 +54,17 @@ public class Contest {
 		}
 		return ret.toString();
 	}
+	
+	public List<TestResult> runTests(int problemID, int numTest, String pathToExecFile){
+		List<TestResult> results = new ArrayList<TestResult>();
+		Problem p = problems.get(problemID - 1);
+		if(numTest == -1){
+			for(int i = 0; i < p.numSampleTest(); i++ ){
+				results.add(p.runTest(i, pathToExecFile));
+			}
+		} else {
+			results.add(p.runTest(numTest - 1, pathToExecFile));
+		}
+		return results;
+	}
 }

@@ -16,12 +16,14 @@ public class WebCrawler {
 	private String password;
 	private WebDriver crawler;
 	private String handleColor;
+	private String pathToExecFile;
 	
-	public WebCrawler(String username, String password) {
+	public WebCrawler(String username, String password, String pathToExecFile) {
 		this.crawler = null;
 		this.username = username;
 		this.password = password;
 		this.handleColor = "black";
+		this.pathToExecFile = pathToExecFile;
 	}
 
 	public String getUsername() {
@@ -42,8 +44,8 @@ public class WebCrawler {
 		else
 			return crawler.getCurrentUrl();
 	}
-	
-	public String getHandleColor(){
+
+	public String getHandleColor() {
 		return handleColor;
 	}
 
@@ -52,6 +54,12 @@ public class WebCrawler {
 	 * @throws IOException
 	 */
 	public Contest parseContest(String contestURL) throws IOException {
+
+		if (contestURL.indexOf(".com/") == -1) {
+			contestURL = "http://codeforces.com/contest/" + contestURL;
+		} else if (!contestURL.startsWith("http://")) {
+			contestURL = "http://" + contestURL;
+		}
 		
 		System.out.println("Parsing...\n");
 		crawler.get(contestURL);
@@ -59,12 +67,12 @@ public class WebCrawler {
 		Elements problems = doc.select(".problems tr");
 
 		int nProblem = problems.size() - 1;
-		if(nProblem <= 0 || contestURL.indexOf("contest") == -1){
+		if (nProblem <= 0 || contestURL.indexOf("contest") == -1) {
 			throw new IOException();
 		}
 		Contest ret = new Contest(doc.select(".rtable .left a").first().text(), contestURL);
 		System.out.println(ret);
-		
+
 		System.out.println("There are " + nProblem + " problems.");
 		for (int i = 1; i <= nProblem; i++) {
 			String problemURL = "http://codeforces.com/"
@@ -79,16 +87,6 @@ public class WebCrawler {
 			for (int j = 0; j < inputs.size(); j++) {
 				problem.addSampleTest(inputs.get(j).text(), outputs.get(j).text());
 			}
-			// List<String> input = problem.getInputs();
-			// for (int j = 0; j < input.size(); j++) {
-			// FileMaker.buildFile((char) ('a' + (i - 1)) + ".in." + (j + 1),
-			// input.get(j));
-			// }
-			// List<String> output = problem.getInputs();
-			// for (int j = 0; j < output.size(); j++) {
-			// FileMaker.buildFile((char) ('a' + (i - 1)) + ".out." + (j + 1),
-			// output.get(j));
-			// }
 			System.out.println(": " + problem.numSampleTest() + " sample tests");
 			ret.addProblem(problem);
 		}
@@ -113,12 +111,16 @@ public class WebCrawler {
 		if (crawler.getPageSource().indexOf("Invalid handle or password") != -1) {
 			throw new IllegalAccessException();
 		}
-		
+
 		handleColor = Jsoup.parse(crawler.getPageSource()).select(".avatar a").get(1).attr("class");
 		String[] tokens = handleColor.split("-");
 		handleColor = tokens[tokens.length - 1];
 	}
 
+	public String getpathToExecFile(){
+		return this.pathToExecFile;
+	}
+	
 	@Override
 	public String toString() {
 		String s = "Crawler: " + username + "\n";

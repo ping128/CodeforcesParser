@@ -1,8 +1,12 @@
 package codeforces;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Problem {
 
@@ -26,19 +30,19 @@ public class Problem {
 		this.inputs.add(parse(input));
 		this.outputs.add(parse(output));
 	}
-	
-	public List<String> getInputs(){
+
+	public List<String> getInputs() {
 		return Collections.unmodifiableList(inputs);
 	}
 
-	public List<String> getOutputs(){
+	public List<String> getOutputs() {
 		return Collections.unmodifiableList(outputs);
 	}
-	
+
 	private String parse(String text) {
 		StringBuilder ret = new StringBuilder();
 		Scanner cin = new Scanner(text);
-		while(cin.hasNextLine()){
+		while (cin.hasNextLine()) {
 			String s = cin.nextLine().trim();
 			if (s.length() > 0) {
 				ret.append(s);
@@ -51,5 +55,26 @@ public class Problem {
 
 	public int numSampleTest() {
 		return this.inputs.size();
+	}
+
+	public TestResult runTest(int testID, String pathToExecFile) {
+		TestRunner runner = new TestRunner(pathToExecFile, inputs.get(testID), outputs.get(testID));
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		try {
+			executor.submit(runner);
+			executor.shutdown();
+			if (!executor.awaitTermination(TestRunner.DEFAULT_TIME_LIMIT, TimeUnit.MILLISECONDS)) {
+				if (!executor.isTerminated()) {
+					if (runner.getResult().result != ExecutionResult.RE)
+						runner.setExecutionResult(ExecutionResult.TLE);
+					runner.kill();
+				}
+			}
+
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
+		runner.getResult().sampleID = "Sample " + (testID + 1) + ":";
+		return runner.getResult();
 	}
 }

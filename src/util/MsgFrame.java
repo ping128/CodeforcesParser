@@ -13,37 +13,37 @@ import javax.swing.border.Border;
 
 public class MsgFrame {
 
+	public static float DEFAULT_FONTSIZE = 20.0f;
+	
 	public static void showMsg(String topic, String s) {
 		final JFrame frame = new JFrame(topic);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
 		JLabel textLabel = new JLabel(s);
 		Border paddingBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		textLabel.setBorder(paddingBorder);
-		textLabel.setFont(textLabel.getFont().deriveFont(20.0f));
-		frame.getContentPane().add(textLabel, BorderLayout.CENTER);
+		textLabel.setFont(textLabel.getFont().deriveFont(DEFAULT_FONTSIZE));
+		frame.add(textLabel, BorderLayout.CENTER);
+		
+			// frame will be disposed once we click something else.
+			KeyboardFocusManager.getCurrentKeyboardFocusManager().addVetoableChangeListener(
+					"focusedWindow", new VetoableChangeListener() {
+						private boolean gained = false;
+	
+						@Override
+						public void vetoableChange(PropertyChangeEvent evt)
+								throws PropertyVetoException {
+							if (evt.getNewValue() == frame) {
+								gained = true;
+							}
+							if (gained && evt.getNewValue() != frame) {
+								frame.dispose();
+							}
+						}
+					});
 
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		// frame will be disposed once we click something else.
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addVetoableChangeListener(
-				"focusedWindow", new VetoableChangeListener() {
-					private boolean gained = false;
-
-					@Override
-					public void vetoableChange(PropertyChangeEvent evt)
-							throws PropertyVetoException {
-						if (evt.getNewValue() == frame) {
-							gained = true;
-						}
-						if (gained && evt.getNewValue() != frame) {
-							frame.dispose();
-						}
-					}
-				});
-	}
-
-	public static void showMsgHold(String topic, String s) {
-
 	}
 }
