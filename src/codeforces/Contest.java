@@ -29,4 +29,29 @@ public class Contest {
 	public String getContestURL(){
 		return this.contestURL;
 	}
+	
+	public String showTests(int problemID, int numTest){
+		StringBuilder ret = new StringBuilder();
+		if(numTest == -1){
+			Problem p = problems.get(problemID);
+			List<String> input = p.getInputs();
+			List<String> output = p.getOutputs();
+			for(int i = 0; i < p.numSampleTest(); i++ ){
+				ret.append("Input " + (i + 1) + "\n");
+				ret.append(input.get(i));
+				ret.append("Output " + (i + 1) + "\n");
+				ret.append(output.get(i));
+			}
+		} else {
+			numTest--;
+			Problem p = problems.get(problemID);
+			List<String> input = p.getInputs();
+			List<String> output = p.getOutputs();
+			ret.append("Input " + (numTest + 1) + "\n");
+			ret.append(input.get(numTest));
+			ret.append("Output " + (numTest + 1) + "\n");
+			ret.append(output.get(numTest));
+		}
+		return ret.toString();
+	}
 }

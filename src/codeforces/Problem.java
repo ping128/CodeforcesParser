@@ -41,8 +41,8 @@ public class Problem {
 		while(cin.hasNextLine()){
 			String s = cin.nextLine().trim();
 			if (s.length() > 0) {
-				if(ret.length() > 0) ret.append("\n");
 				ret.append(s);
+				ret.append("\n");
 			}
 		}
 		cin.close();

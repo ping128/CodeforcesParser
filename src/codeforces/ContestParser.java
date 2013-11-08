@@ -68,18 +68,11 @@ public class ContestParser {
 		while (true) {
 			System.out.print(">> ");
 			String[] commands = cin.nextLine().split(" ");
-			if (commands.length > 0) {
-				if (commands[0].equals("help")) {
-					driver.help();
-				} else if (commands[0].equals("exit")) {
-					MsgFrame.showMsg("Login", "<html><font color='black'>Bye!</font></html>");
-
-					break;
-				} else {
-					System.out.println("Invalid Command!");
-				}
-			} else {
-				System.out.println("Invalid Command!");
+			try {
+				driver.run(commands);
+			} catch (Exception e){
+				MsgFrame.showMsg("Commands",
+						"<html><font color='red'>Invalid Commands!</font></html>");
 			}
 			System.out.println();
 		}

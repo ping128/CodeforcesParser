@@ -22,6 +22,9 @@ public class MsgFrame {
 		textLabel.setFont(textLabel.getFont().deriveFont(20.0f));
 		frame.getContentPane().add(textLabel, BorderLayout.CENTER);
 
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 		// frame will be disposed once we click something else.
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addVetoableChangeListener(
 				"focusedWindow", new VetoableChangeListener() {
@@ -38,9 +41,9 @@ public class MsgFrame {
 						}
 					}
 				});
+	}
 
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+	public static void showMsgHold(String topic, String s) {
+
 	}
 }

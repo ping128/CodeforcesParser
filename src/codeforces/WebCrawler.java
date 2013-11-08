@@ -59,7 +59,7 @@ public class WebCrawler {
 		Elements problems = doc.select(".problems tr");
 
 		int nProblem = problems.size() - 1;
-		if(nProblem <= 0){
+		if(nProblem <= 0 || contestURL.indexOf("contest") == -1){
 			throw new IOException();
 		}
 		Contest ret = new Contest(doc.select(".rtable .left a").first().text(), contestURL);
