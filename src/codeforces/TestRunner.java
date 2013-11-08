@@ -79,7 +79,6 @@ public class TestRunner implements Runnable {
 			int ret = process.waitFor();
 			if (ret != 0) {
 				if (this.testResult.result == ExecutionResult.RUNNING){
-					System.out.println("ADAS");
 					setExecutionResult(ExecutionResult.RE);
 				}
 			} else {
@@ -95,8 +94,6 @@ public class TestRunner implements Runnable {
 			}
 		} catch (IOException e) {
 			// file not found
-			System.out.println("ASDAAAAAAA");
-			e.printStackTrace();
 			setExecutionResult(ExecutionResult.RE);
 		} catch (Exception e) {
 			// normal interupt for TLE codes

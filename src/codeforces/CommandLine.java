@@ -56,8 +56,8 @@ public class CommandLine {
 
 	private void help() {
 		System.out.println("Command List");
-		System.out.println("exit: to exit");
-		System.out.println("showtest PROBLEM [test_number]: show sample tests (ex. showtest a 1)");
-		System.out.println("runtest PROBLEM [test_number]: run sample tests (ex. runtest a)");
+		System.out.println("- exit: to exit");
+		System.out.println("- showtest PROBLEM [test_number]: show sample tests (ex. showtest a 1)");
+		System.out.println("- runtest PROBLEM [test_number]: run sample tests (ex. runtest a)");
 	}
 }
