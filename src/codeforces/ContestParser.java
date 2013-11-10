@@ -28,7 +28,6 @@ public class ContestParser {
 				String name = cin.nextLine();
 
 				System.out.print("Password: ");
-
 				Console cons = System.console();
 				String password;
 				if ((cons = System.console()) != null) {
@@ -38,6 +37,10 @@ public class ContestParser {
 					password = cin.nextLine();
 				}
 
+				System.out.print("Path to Execute: ");
+				String path = cin.nextLine();
+				if(path.length() > 0) pathToExecFile = path;
+				
 				WebCrawler crawler2 = new WebCrawler(name, password, pathToExecFile);
 				crawler2.login(LOGIN_URL);
 				crawler = crawler2;

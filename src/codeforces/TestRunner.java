@@ -94,6 +94,7 @@ public class TestRunner implements Runnable {
 			}
 		} catch (IOException e) {
 			// file not found
+			System.out.println("File Not Found");
 			setExecutionResult(ExecutionResult.RE);
 		} catch (Exception e) {
 			// normal interupt for TLE codes
