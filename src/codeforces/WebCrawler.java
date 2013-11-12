@@ -10,6 +10,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import util.HandleColorMap;
+
 public class WebCrawler {
 
 	private String username;
@@ -115,6 +117,8 @@ public class WebCrawler {
 		handleColor = Jsoup.parse(crawler.getPageSource()).select(".avatar a").get(1).attr("class");
 		String[] tokens = handleColor.split("-");
 		handleColor = tokens[tokens.length - 1];
+		if(HandleColorMap.colorsMap.containsKey(handleColor))
+			handleColor = HandleColorMap.colorsMap.get(handleColor);
 	}
 
 	public String getpathToExecFile(){
