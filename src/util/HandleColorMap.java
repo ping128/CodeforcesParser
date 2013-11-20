@@ -3,10 +3,11 @@ package util;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class HandleColorMap {
 
-	
-	public static Map<String, String> colorsMap;
+	public static final Map<String, String> colorsMap;
     static
     {
     	colorsMap = new HashMap<String, String>();
