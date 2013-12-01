@@ -3,7 +3,6 @@ package codeforces;
 import java.io.Console;
 import java.util.Scanner;
 
-import util.HandleColorMap;
 import util.MsgFrame;
 
 public class ContestParser {
